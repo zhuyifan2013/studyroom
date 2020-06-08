@@ -1,9 +1,13 @@
 import 'dart:developer';
 
+import 'package:app/pages/page_home.dart';
 import 'package:app/routes.dart';
+import 'package:app/utils/task_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'agora/agora.dart';
+import 'pages/me_tab.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,34 +31,25 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class MainPage extends StatefulWidget {
+  MainPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+class _MainPageState extends State<MainPage>{
+  int _selectedIndex = 0;
+  final TaskManager _taskManager = TaskManager();
+
   @override
   void initState() {
     super.initState();
     // Init Agora SDK
-    AgoraManager().agoraInit();
+//    AgoraManager().agoraInit();
 
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('state = $state');
   }
 
   @override
@@ -65,40 +60,41 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           centerTitle: true,
           elevation: 0,
         ),
-        body: Column(
-          children: [
-            Row(
-              children: <Widget>[
-                Expanded(
-                    flex: 1,
-                    child: Container(
-                      padding: EdgeInsets.all(16),
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      child: headerButton(context),
-                    )),
-              ],
-            )
-          ],
+        body: Container(
+          child: _getChild(),
         ),
-        bottomNavigationBar: BottomNavigationBar(items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            title: Text('Me'),
-          ),
-        ]));
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              title: Text('Me'),
+            ),
+          ],
+          onTap: _onItemTapped,
+        ));
   }
 
-  Widget headerButton(BuildContext context) => Material(
-        color: Colors.yellow,
-        child: InkWell(
-          onTap: () {
-            Navigator.pushNamed(context, '/study_room');
-          },
-          child: Center(child: Text('Go to room111')),
-        ),
-      );
+  Widget _getChild() {
+    switch (_selectedIndex) {
+      case 0:
+        return ChangeNotifierProvider.value(
+          value: _taskManager,
+          child: PageHome(),
+        );
+      case 1:
+        return PageMetab();
+    }
+    return PageHome();
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 }

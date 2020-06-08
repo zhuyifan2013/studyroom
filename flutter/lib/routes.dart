@@ -1,4 +1,4 @@
-import 'package:app/page_study_room.dart';
+import 'package:app/pages/page_study_room.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -33,8 +33,12 @@ class RouteConfiguration {
       (context, match) => PageStudyRoom(),
     ),
     Path(
+      r'^' + PageStudyRoom.defaultRoute,
+          (context, match) => PageStudyRoom(),
+    ),
+    Path(
       r'^/',
-      (context, match) => MyHomePage(title: 'Yifan'),
+      (context, match) => MainPage(title: 'Yifan'),
     ),
   ];
 
