@@ -21,7 +21,7 @@ class TaskManager extends ChangeNotifier {
     this.fetchTasksFromDb();
   }
 
-  void fetchTasksFromDb() async {
+  Future<List<Task>> fetchTasksFromDb() async {
     final db = await DBManager().getDB();
     final List<Map<String, dynamic>> maps = await db.query(DBManager.TABLE_TASK);
     this._tasks.clear();
@@ -29,6 +29,7 @@ class TaskManager extends ChangeNotifier {
           return Task.fromDBMap(maps[i]);
         }));
     notifyListeners();
+    return this._tasks;
   }
 
   List<Task> getTasks() {

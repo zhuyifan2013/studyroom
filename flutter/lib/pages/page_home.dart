@@ -90,7 +90,6 @@ class _PageHomeState extends State<PageHome> {
     return Consumer<TaskManager>(
       builder: (context, taskList, child) {
         final List<Task> tasks = taskList.getTasks();
-        print('Yifan : ' + tasks.length.toString());
         if (tasks.length == 0) {
           return Text('Nothing');
         }

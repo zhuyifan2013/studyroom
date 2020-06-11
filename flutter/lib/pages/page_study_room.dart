@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:app/agora/agora.dart';
+//import 'package:app/agora/agora.dart';
 import 'package:app/model/focus_time.dart';
+import 'package:app/utils/focus_time_manager.dart';
 import 'package:flutter/material.dart';
 
 class PageStudyRoom extends StatefulWidget {
@@ -69,9 +70,17 @@ class _PageStudyRoomState extends State<PageStudyRoom> with WidgetsBindingObserv
         ),
         body: ListView(
           padding: EdgeInsets.all(16),
-          children: <Widget>[Text("$_start")],
+          children: <Widget>[
+            Text("$_start"),
+            FlatButton(
+              onPressed: () {
+                FocusTimeManager().addFocusTime(currentFocusTime);
+              },
+              child: Text('保存'),
+              
+            )
+          ],
         ));
   }
-
-  Widget _buildStudyArea() {}
+  
 }

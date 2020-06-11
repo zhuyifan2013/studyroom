@@ -16,7 +16,6 @@ class _PageMetabState extends State<PageMetab> {
     super.initState();
     AccountManager().currentUser().then((user) {
       setState(() {
-        print('yifan: setState' + _currentUser.toString());
         _currentUser = user;
       });
     });
@@ -25,7 +24,6 @@ class _PageMetabState extends State<PageMetab> {
   @override
   Widget build(BuildContext context) {
     if (_currentUser != null) {
-      print('Build one');
       return Text(_currentUser.token);
     }
     return Scaffold(
@@ -66,7 +64,6 @@ class _PageMetabState extends State<PageMetab> {
                 await AccountManager().login(_email, _password);
                 AccountManager().currentUser().then((user) {
                   setState(() {
-                    print('yifan: setState' + _currentUser.toString());
                     _currentUser = user;
                   });
                 });

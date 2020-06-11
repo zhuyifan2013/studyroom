@@ -1,12 +1,12 @@
-import 'dart:developer';
 
+import 'package:app/pages/debug_page.dart';
 import 'package:app/pages/page_home.dart';
 import 'package:app/routes.dart';
 import 'package:app/utils/task_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'agora/agora.dart';
+//import 'agora/agora.dart';
 import 'pages/me_tab.dart';
 
 void main() {
@@ -74,6 +74,10 @@ class _MainPageState extends State<MainPage>{
               icon: Icon(Icons.account_circle),
               title: Text('Me'),
             ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.android),
+              title: Text('Debug'),
+            ),
           ],
           onTap: _onItemTapped,
         ));
@@ -88,6 +92,8 @@ class _MainPageState extends State<MainPage>{
         );
       case 1:
         return PageMetab();
+      case 2:
+        return PageDebug();
     }
     return PageHome();
   }

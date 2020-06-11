@@ -4,7 +4,6 @@ class SPManager {
   static const String SP_KEY_CURRENT_USER = "current_user";
 
   static final SPManager _spManager = SPManager._internal();
-  SharedPreferences _sp;
 
   factory SPManager() {
     return _spManager;
