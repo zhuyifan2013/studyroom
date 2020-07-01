@@ -1,9 +1,10 @@
-
 import 'package:app/pages/debug_page.dart';
-import 'package:app/pages/page_home.dart';
+import 'package:app/pages/page_home/page_home.dart';
 import 'package:app/routes.dart';
 import 'package:app/utils/task_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 //import 'agora/agora.dart';
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
+        primarySwatch: Colors.teal,
+//        primaryTextTheme: TextTheme(headline6: TextStyle(color: Colors.black)),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: initialRoute,
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MainPage extends StatefulWidget {
-  MainPage({Key key, this.title}) : super(key: key);
+  const MainPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
@@ -40,47 +42,59 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage>{
+class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   final TaskManager _taskManager = TaskManager();
 
   @override
   void initState() {
     super.initState();
+    [Permission.storage].request().then((value) {
+      print(value[Permission.storage]);
+    });
     // Init Agora SDK
 //    AgoraManager().agoraInit();
-
   }
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+    ));
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Study Room'),
-          centerTitle: true,
-          elevation: 0,
-        ),
-        body: Container(
-          child: _getChild(),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text('Home'),
+            appBar: AppBar(
+              brightness: Brightness.light,
+              backgroundColor: Colors.transparent,
+              title: Text(
+                  'Study Room',
+                  style: TextStyle(
+                    color: Colors.black87
+                  ),
+              ),
+              centerTitle: true,
+              elevation: 0,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              title: Text('Me'),
+            body: Container(
+              child: _getChild(),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.android),
-              title: Text('Debug'),
-            ),
-          ],
-          onTap: _onItemTapped,
-        ));
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: _selectedIndex,
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  title: Text('Home'),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.account_circle),
+                  title: Text('Me'),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.android),
+                  title: Text('Debug'),
+                ),
+              ],
+              onTap: _onItemTapped,
+            ));
   }
 
   Widget _getChild() {

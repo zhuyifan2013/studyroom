@@ -35,4 +35,14 @@ class TaskManager extends ChangeNotifier {
   List<Task> getTasks() {
     return _tasks;
   }
+
+  Task findTaskById(String id) {
+    Task task;
+    _tasks.forEach((element) {
+      if (element.id == id) {
+        task = element;
+      }
+    });
+    return task;
+  }
 }

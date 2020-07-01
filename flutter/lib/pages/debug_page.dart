@@ -29,7 +29,7 @@ class _PageDebugState extends State<PageDebug> {
           onPressed: ()  async {
             List<FocusTime> list = await FocusTimeManager().fetchFocusTimeFromDb();
             String printData = "";
-            List.generate(list.length, (index) {printData += list[index].toMapJson().toString() + "\n";});
+            List.generate(list.length, (index) {printData += list[index].toJson().toString() + "\n";});
             setState(()  {
               _data = printData;
             });

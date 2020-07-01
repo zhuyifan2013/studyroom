@@ -36,7 +36,6 @@ router.post('/', auth.optional, (req, res, next) => {
 
 //POST login route (optional, everyone has access)
 router.post('/login', auth.optional, (req, res, next) => {
-  console.log('Yifan req: ' + String(req.body.key))
   const { body: { user } } = req;
 
   if(!user.email) {

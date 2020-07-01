@@ -63,6 +63,7 @@ class _PageMetabState extends State<PageMetab> {
               if (_email.isNotEmpty && _password.isNotEmpty) {
                 await AccountManager().login(_email, _password);
                 AccountManager().currentUser().then((user) {
+                  print('Login user : $user');
                   setState(() {
                     _currentUser = user;
                   });

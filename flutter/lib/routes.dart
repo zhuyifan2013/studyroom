@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'main.dart';
 
-typedef PathWidgetBuilder = Widget Function(BuildContext, String);
+typedef PathWidgetBuilder = Widget Function(BuildContext, String, Object);
 
 class Path {
   const Path(this.pattern, this.builder);
@@ -29,15 +29,11 @@ class RouteConfiguration {
   static List<Path> paths = [
     Path(
       r'^' + PageStudyRoom.defaultRoute,
-      (context, match) => PageStudyRoom(),
-    ),
-    Path(
-      r'^' + PageStudyRoom.defaultRoute,
-          (context, match) => PageStudyRoom(),
+      (context, match, args) => PageStudyRoom(args: args)
     ),
     Path(
       r'^/',
-      (context, match) => MainPage(title: 'Yifan'),
+      (context, match, args) => MainPage(title: 'Yifan'),
     ),
   ];
 
@@ -47,14 +43,8 @@ class RouteConfiguration {
       if (regExpPattern.hasMatch(settings.name)) {
         final firstMatch = regExpPattern.firstMatch(settings.name);
         final match = (firstMatch.groupCount == 1) ? firstMatch.group(1) : null;
-        if (kIsWeb) {
-          return NoAnimationMaterialPageRoute<void>(
-            builder: (context) => path.builder(context, match),
-            settings: settings,
-          );
-        }
         return MaterialPageRoute<void>(
-          builder: (context) => path.builder(context, match),
+          builder: (context) => path.builder(context, match, settings.arguments),
           settings: settings,
         );
       }

@@ -41,10 +41,10 @@ class Task {
     };
   }
 
-  factory Task.fromMapJson(Map<String, dynamic> json) => _$TaskFromJson(json);
+  factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
 
   /// `toJson` is the convention for a class to declare support for serialization
   /// to JSON. The implementation simply calls the private, generated
   /// helper method `_$UserToJson`.
-  Map<String, dynamic> toMapJson() => _$TaskToJson(this);
+  Map<String, dynamic> toJson() => _$TaskToJson(this);
 }

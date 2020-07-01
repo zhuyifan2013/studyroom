@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'focus_time.g.dart';
@@ -22,9 +24,9 @@ class FocusTime {
     this.createdTime = DateTime.now().millisecondsSinceEpoch.toString();
   }
 
-  factory FocusTime.fromMapJson(Map<String, dynamic> json) => _$FocusTimeFromJson(json);
+  factory FocusTime.fromJson(Map<String, dynamic> json) => _$FocusTimeFromJson(json);
 
-  Map<String, dynamic> toMapJson() => _$FocusTimeToJson(this);
+  Map<String, dynamic> toJson() => _$FocusTimeToJson(this);
 
   Map<String, dynamic> toMap() {
     return {'duration': duration, 'task_id': taskId, 'created_time': createdTime};
@@ -36,4 +38,9 @@ class FocusTime {
     this.taskId = map['task_id'];
     this.createdTime = map['created_time'];
   }
+
+  String toRawJson() {
+    return json.encode({"focus_time" : this.toJson()});
+  }
+
 }
