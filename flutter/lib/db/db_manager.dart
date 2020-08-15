@@ -34,7 +34,7 @@ class DBManager {
     return _sqlDB;
   }
 
-  static const _CREATE_TABLE_TASK = "CREATE TABLE  " + TABLE_TASK + "(id INTEGER PRIMARY KEY, content TEXT, focus_time_list TEXT, created_time TEXT)";
+  static const _CREATE_TABLE_TASK = "CREATE TABLE  " + TABLE_TASK + "(id INTEGER PRIMARY KEY, content TEXT, focus_time_list TEXT, created_time TEXT, finished TEXT)";
   static const _CREATE_TABLE_FOCUS_TIME = "CREATE TABLE  " +
       TABLE_FOCUS_TIME +
       "("

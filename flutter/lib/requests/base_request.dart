@@ -1,29 +1,12 @@
-import 'package:app/utils/constants.dart';
-import 'package:http/http.dart' as http;
+import 'package:app/requests/dio/dio_manager.dart';
+import 'package:app/requests/dio/http_method.dart';
 
-abstract class BaseRequest {
-  dynamic _body;
-  Map<String, String> _headers;
+import 'dio/errtor_response.dart';
 
-  BaseRequest() {
-    this._headers = {'Content-Type': 'application/json; charset=UTF-8'};
-  }
-
-  dynamic body(dynamic body) {
-    this._body = body;
-  }
-
-  dynamic headers(Map<String, String> headers) {
-    this._headers = headers;
-  }
-
+abstract class BaseRequest<T> {
   String path();
 
-  Future<http.Response> post() {
-    return http.post(
-      Constants.API_DOMAIN + path(),
-      headers: _headers,
-      body: _body,
-    );
+  void post(Map body, Function(T) success, Function(ErrorResponse) error) {
+    DioManager().request(HttpMethod.POST, path(), data: body, success: success, error: error);
   }
 }

@@ -1,4 +1,5 @@
-import 'package:app/pages/page_study_room.dart';
+import 'package:app/pages/page_study_room/page_study_room.dart';
+import 'package:app/pages/signup_login/page_signup_login.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -32,8 +33,12 @@ class RouteConfiguration {
       (context, match, args) => PageStudyRoom(args: args)
     ),
     Path(
+      r'^' + SignupLoginPage.defaultRoute,
+          (context, match, args) => SignupLoginPage(),
+    ),
+    Path(
       r'^/',
-      (context, match, args) => MainPage(title: 'Yifan'),
+          (context, match, args) => MainPage(title: 'Yifan'),
     ),
   ];
 

@@ -22,4 +22,5 @@ router.post('/create', auth.optional, (req, res, next) => {
 router.get('/', auth.optional, (req,res,next) => {
    return res.json({"yifan": '11'})
 })
+
 module.exports = router;

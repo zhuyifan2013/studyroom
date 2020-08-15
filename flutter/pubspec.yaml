@@ -31,6 +31,9 @@ dependencies:
   provider:
   adhara_socket_io:
   permission_handler:
+  flutter_local_notifications:
+  dio:
+  curved_navigation_bar:
 
 
   # The following adds the Cupertino Icons font to your application.

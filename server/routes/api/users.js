@@ -2,10 +2,12 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const router = require('express').Router();
 const auth = require('../auth');
+const ObjectID = require("mongoose");
+const {buildSuccessResponse} = require("../response");
 const Users = mongoose.model('Users');
 
 //POST new user route (optional, everyone has access)
-router.post('/', auth.optional, (req, res, next) => {
+router.post('/new', auth.optional, (req, res, next) => {
   
   const { body: { user } } = req;
 
@@ -26,12 +28,24 @@ router.post('/', auth.optional, (req, res, next) => {
     });
   }
 
+  if(!user.name) {
+    return res.status(422).json({
+      errors: {
+        name: 'is required',
+      },
+    });
+  }
+
   const finalUser = new Users(user);
 
   finalUser.setPassword(user.password);
+  finalUser.setName(user.name)
+  finalUser.setID(mongoose.Types.ObjectId())
 
-  return finalUser.save()
-    .then(() => res.json({ user: finalUser.toAuthJSON() }));
+  return finalUser.save(function(err, obj){
+    console.log(finalUser.toAuthJSON())
+      res.json(buildSuccessResponse(JSON.stringify({user: finalUser.toAuthJSON()})))
+  })
 });
 
 //POST login route (optional, everyone has access)
@@ -63,10 +77,10 @@ router.post('/login', auth.optional, (req, res, next) => {
       const user = passportUser;
       user.token = passportUser.generateJWT();
 
-      return res.json({ user: user.toAuthJSON() });
+      return res.json(buildSuccessResponse(JSON.stringify({user: user.toAuthJSON()})));
     }
 
-    return status(400).info;
+    return res.sendStatus(400).info;
   })(req, res, next);
 });
 

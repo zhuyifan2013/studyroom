@@ -14,14 +14,15 @@ class FocusTime {
   @JsonKey(name: 'duration')
   int duration;
 
+  /// The created time of this focus time since Unix epoch
   @JsonKey(name: 'created_time')
-  String createdTime;
+  int createdTime;
 
   @JsonKey(name: 'task_id')
   int taskId;
 
   FocusTime.normal(this.taskId, this.duration) {
-    this.createdTime = DateTime.now().millisecondsSinceEpoch.toString();
+    this.createdTime = DateTime.now().millisecondsSinceEpoch;
   }
 
   factory FocusTime.fromJson(Map<String, dynamic> json) => _$FocusTimeFromJson(json);
@@ -36,7 +37,7 @@ class FocusTime {
     this.id = map['id'].toString();
     this.duration = map['duration'];
     this.taskId = map['task_id'];
-    this.createdTime = map['created_time'];
+    this.createdTime = int.parse(map['created_time']);
   }
 
   String toRawJson() {

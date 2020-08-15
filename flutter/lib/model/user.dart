@@ -12,7 +12,7 @@ part 'user.g.dart';
 class User {
   User();
 
-  @JsonKey(defaultValue: "Yifan")
+  @JsonKey(name: 'name', defaultValue: "Yifan")
   String name;
 
   @JsonKey(name: 'email', required: true)
@@ -24,6 +24,7 @@ class User {
   @JsonKey(name: '_id', required: true)
   String id;
 
+  @JsonKey(name: 'password', required: false)
   String password;
 
   /// A necessary factory constructor for creating a new User instance

@@ -1,4 +1,5 @@
 import 'package:app/model/focus_time.dart';
+import 'package:app/utils/account_manager.dart';
 import 'package:app/utils/focus_time_manager.dart';
 import 'package:app/utils/task_manager.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,12 @@ class _PageDebugState extends State<PageDebug> {
             });
           },
           child: Text('获取 Focus Time List'),
+        ),
+        FlatButton(
+          onPressed: ()  async {
+            AccountManager().clearUser();
+          },
+          child: Text('Clear User Info'),
         ),
       ],
     );

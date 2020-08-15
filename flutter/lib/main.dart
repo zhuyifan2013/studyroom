@@ -1,16 +1,21 @@
 import 'package:app/pages/debug_page.dart';
 import 'package:app/pages/page_home/page_home.dart';
 import 'package:app/routes.dart';
+import 'package:app/theme_data.dart';
+import 'package:app/utils/notification.dart';
 import 'package:app/utils/task_manager.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 //import 'agora/agora.dart';
-import 'pages/me_tab.dart';
+import 'pages/me_tab/me_tab.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  NotificationManager().init();
   runApp(MyApp());
 }
 
@@ -23,9 +28,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        brightness: Brightness.light,
         primarySwatch: Colors.teal,
 //        primaryTextTheme: TextTheme(headline6: TextStyle(color: Colors.black)),
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        textTheme: Theme.of(context).textTheme.apply(displayColor: Colors.black87),
       ),
       initialRoute: initialRoute,
       onGenerateRoute: RouteConfiguration.onGenerateRoute,
@@ -59,42 +66,55 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
+      statusBarColor: Colors.transparent,
     ));
     return Scaffold(
-            appBar: AppBar(
-              brightness: Brightness.light,
-              backgroundColor: Colors.transparent,
-              title: Text(
-                  'Study Room',
-                  style: TextStyle(
-                    color: Colors.black87
-                  ),
-              ),
-              centerTitle: true,
-              elevation: 0,
-            ),
-            body: Container(
-              child: _getChild(),
-            ),
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: _selectedIndex,
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  title: Text('Home'),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.account_circle),
-                  title: Text('Me'),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.android),
-                  title: Text('Debug'),
-                ),
-              ],
-              onTap: _onItemTapped,
-            ));
+        body: SafeArea(
+            child: Container(
+          child: _getChild(),
+        )),
+        bottomNavigationBar: CurvedNavigationBar(
+          animationDuration: Duration(milliseconds: 300),
+          animationCurve: Curves.easeInOutQuart,
+          backgroundColor: AppThemeData.color_page_bg,
+//          color: AppThemeData.color_app,
+          items: <Widget> [
+            Icon(Icons.home,color: AppThemeData.color_app),
+            Icon(Icons.android, color: AppThemeData.color_app),
+          ],
+
+//          decoration: BoxDecoration(
+//            borderRadius: BorderRadius.only(
+//                topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+//            boxShadow: [
+//              BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+//            ],
+//          ),
+//          child: ClipRRect(
+//            borderRadius: BorderRadius.only(
+//              topLeft: Radius.circular(30.0),
+//              topRight: Radius.circular(30.0),
+//            ),
+//            child: BottomNavigationBar(
+//              currentIndex: _selectedIndex,
+//              items: [
+//                BottomNavigationBarItem(
+//                  icon: Icon(Icons.home),
+//                  title: Text('Home'),
+//                ),
+//                BottomNavigationBarItem(
+//                  icon: Icon(Icons.account_circle),
+//                  title: Text('Me'),
+//                ),
+//                BottomNavigationBarItem(
+//                  icon: Icon(Icons.android),
+//                  title: Text('Debug'),
+//                ),
+//              ],
+//              onTap: _onItemTapped,
+//            ),
+//          ),
+        ));
   }
 
   Widget _getChild() {

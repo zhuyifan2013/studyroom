@@ -9,11 +9,15 @@ import 'package:app/model/socket_study_user.dart';
 import 'package:app/model/task.dart';
 import 'package:app/model/user.dart';
 import 'package:app/pages/arguments/study_room_args.dart';
+import 'package:app/pages/page_study_room/study_feedback_dialog.dart';
 import 'package:app/requests/enter_room_request.dart';
 import 'package:app/utils/account_manager.dart';
+import 'package:app/utils/constants.dart';
 import 'package:app/utils/focus_time_manager.dart';
+import 'package:app/utils/notification.dart';
 import 'package:app/utils/socket_manager.dart';
 import 'package:app/utils/task_manager.dart';
+import 'package:app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -32,7 +36,7 @@ class PageStudyRoom extends StatefulWidget {
 
 class _PageStudyRoomState extends State<PageStudyRoom> with WidgetsBindingObserver {
   Timer _timer;
-  int _start = 40 * 60;
+  int _countDown = 3;
   int _studyDuration;
   String _studyTopic;
   Task _task;
@@ -41,6 +45,7 @@ class _PageStudyRoomState extends State<PageStudyRoom> with WidgetsBindingObserv
   StudyRoomArgs args;
   String _roomId;
   User _currentUser;
+  BuildContext _buildContext;
 
   List<SocketStudyUser> _studyUsers = [];
 
@@ -55,10 +60,11 @@ class _PageStudyRoomState extends State<PageStudyRoom> with WidgetsBindingObserv
       oneSec,
       (Timer timer) => setState(
         () {
-          if (_start < 1) {
+          if (_countDown < 1) {
             timer.cancel();
+            finishFocusTime();
           } else {
-            _start = _start - 1;
+            _countDown = _countDown - 1;
           }
         },
       ),
@@ -70,7 +76,7 @@ class _PageStudyRoomState extends State<PageStudyRoom> with WidgetsBindingObserv
     super.initState();
 
     // Get arguments
-    _start = _studyDuration = this.args.studyDuration;
+//    _countDown = _studyDuration = this.args.studyDuration;
     _studyTopic = this.args.studyTopic;
     _task = TaskManager().findTaskById(this.args.studyTask);
 
@@ -78,34 +84,39 @@ class _PageStudyRoomState extends State<PageStudyRoom> with WidgetsBindingObserv
     WidgetsBinding.instance.addObserver(this);
     startTimer();
 
-    var request = EnterRoomRequest()..body(json.encode({"topic": _studyTopic}));
+    var request = EnterRoomRequest();
 
-    Future.wait({AccountManager().currentUser(), request.post()}).then((value) {
-      _currentUser = value[0];
-      http.Response response = value[1];
-      if (response.statusCode == 200) {
-        _roomId = json.decode(response.body)["room_id"];
-
-        SocketManager().createSocket(SocketManager.createSocketOptions()).then((socket) {
-          _socketIO = socket;
-
-          socket.onConnect((data) {
-            socket.emit('study_room/enter', [json.encode(SocketStudyUser(_currentUser, _currentFocusTime, _task, _studyTopic, _roomId).toJson())]);
-          });
-
-          socket.on('study_room/update', (data) {
-            _studyUsers.clear();
-            (data as List).forEach((element) {
-              setState(() {
-                _studyUsers.add(SocketStudyUser.fromJson(json.decode(element)));
-              });
-            });
-          });
-          socket.onConnectError((data) {});
-          socket.connect();
-        });
-      }
-    });
+//    AccountManager().currentUser().then((user){
+//      request.post({"topic": _studyTopic},
+//              (){})
+//
+//    });
+//    Future.wait({AccountManager().currentUser(), }).then((value) {
+//      _currentUser = value[0];
+//      http.Response response = value[1];
+//      if (response.statusCode == 200) {
+//        _roomId = json.decode(response.body)["room_id"];
+//
+//        SocketManager().createSocket(SocketManager.createSocketOptions()).then((socket) {
+//          _socketIO = socket;
+//
+//          socket.onConnect((data) {
+//            socket.emit('study_room/enter', [json.encode(SocketStudyUser(_currentUser, _currentFocusTime, _task, _studyTopic, _roomId).toJson())]);
+//          });
+//
+//          socket.on('study_room/update', (data) {
+//            _studyUsers.clear();
+//            (data as List).forEach((element) {
+//              setState(() {
+//                _studyUsers.add(SocketStudyUser.fromJson(json.decode(element)));
+//              });
+//            });
+//          });
+//          socket.onConnectError((data) {});
+//          socket.connect();
+//        });
+//      }
+//    });
   }
 
   FocusTime createNewFocusTime() {
@@ -122,13 +133,24 @@ class _PageStudyRoomState extends State<PageStudyRoom> with WidgetsBindingObserv
     super.dispose();
   }
 
+  AppLifecycleState _currentState = AppLifecycleState.resumed;
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     print('state = $state');
+    if (state == AppLifecycleState.paused) {
+      _currentState = AppLifecycleState.paused;
+      onUserLeave();
+    }
+
+    if (_currentState == AppLifecycleState.paused && state == AppLifecycleState.resumed) {
+      onUserBack();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    this._buildContext = context;
     return Scaffold(
         appBar: AppBar(
           title: Text('Study'),
@@ -159,11 +181,9 @@ class _PageStudyRoomState extends State<PageStudyRoom> with WidgetsBindingObserv
       padding: EdgeInsets.all(16),
       children: <Widget>[
         ..._buildPartnersView(context),
-        Text("$_start"),
+        Text("剩余学习时间 ${Utils.formatStudyDuration(_countDown)}"),
         FlatButton(
-          onPressed: () {
-            FocusTimeManager().addFocusTime(_currentFocusTime);
-          },
+          onPressed: () {},
           child: Text('保存'),
         )
       ],
@@ -176,5 +196,36 @@ class _PageStudyRoomState extends State<PageStudyRoom> with WidgetsBindingObserv
         child: ListTile(title: Text(studyUser.user.email)),
       );
     }).toList();
+  }
+
+  /// Finish this focus time, show dialog and save it.
+  void finishFocusTime() {
+    // Show feedback
+    FocusTimeManager().addFocusTime(_currentFocusTime);
+
+    showDialog(
+        context: this._buildContext,
+        builder: (BuildContext context) {
+          return StudyFeedbackDialog(pressCallback: () {
+            log("Yifan Callback");
+            Navigator.of(context).pop();
+          });
+        });
+  }
+
+  int _leaveTime = 0;
+
+  void onUserLeave() {
+    _leaveTime = DateTime.now().millisecondsSinceEpoch;
+    NotificationManager().showNotification();
+  }
+
+  void onUserBack() {
+    int leaveDuration = DateTime.now().millisecondsSinceEpoch - _leaveTime;
+
+    if (leaveDuration > Constants.MAX_LEAVE_DURATION) {
+      // Show failure dialog
+    }
+
   }
 }

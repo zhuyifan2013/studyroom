@@ -10,7 +10,7 @@ FocusTime _$FocusTimeFromJson(Map<String, dynamic> json) {
   return FocusTime()
     ..id = json['_id'] as String
     ..duration = json['duration'] as int
-    ..createdTime = json['created_time'] as String
+    ..createdTime = json['created_time'] as int
     ..taskId = json['task_id'] as int;
 }
 

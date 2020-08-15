@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const { Schema } = mongoose;
 
 const UsersSchema = new Schema({
+  _id:String,
+  name: String,
   email: String,
   hash: String,
   salt: String,
@@ -14,6 +16,15 @@ UsersSchema.methods.setPassword = function(password) {
   this.salt = crypto.randomBytes(16).toString('hex');
   this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
 };
+
+UsersSchema.methods.setName = function(name) {
+  this.name = name
+}
+
+UsersSchema.methods.setID = function(id) {
+  console.log(id)
+  this._id = id
+}
 
 UsersSchema.methods.validatePassword = function(password) {
   const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
@@ -35,6 +46,7 @@ UsersSchema.methods.generateJWT = function() {
 UsersSchema.methods.toAuthJSON = function() {
   return {
     _id: this._id,
+    name: this.name,
     email: this.email,
     token: this.generateJWT(),
   };

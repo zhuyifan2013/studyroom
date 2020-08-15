@@ -2,7 +2,7 @@ import 'package:app/pages/arguments/study_room_args.dart';
 import 'package:app/utils/task_manager.dart';
 import 'package:flutter/material.dart';
 
-import '../page_study_room.dart';
+import '../page_study_room/page_study_room.dart';
 
 class RoomSetting extends StatefulWidget {
   @override
