@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:app/model/task.dart';
 import 'package:app/pages/page_home/room_setting.dart';
+import 'package:app/utils/constants.dart';
 import 'package:app/utils/task_manager.dart';
 import 'package:app/widgets/sr_button.dart';
 import 'package:app/widgets/task_item_widget.dart';
@@ -35,7 +36,8 @@ class _PageHomeState extends State<PageHome> {
     onPressed: () {
       log("Click");
       if(TaskManager().getTasks().isNotEmpty) {
-        _showRoomSetting(context);
+//        _showRoomSetting(context);
+        Navigator.pushNamed(context, Constants.ROUTE_ROOM_SETTING);
       }
     },
   );
@@ -120,7 +122,7 @@ class _PageHomeState extends State<PageHome> {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return RoomSetting();
+          return RoomSettingPage();
         });
   }
 }

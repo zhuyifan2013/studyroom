@@ -23,6 +23,9 @@ class Task {
   @JsonKey(name: 'finished', defaultValue: false)
   bool finished;
 
+  @JsonKey(name: 'topic')
+  String topic;
+
   Task.fromContent(String content) {
     this.content = content;
     this.focusTimeList = [];
@@ -35,6 +38,7 @@ class Task {
     this.focusTimeList = (jsonDecode(map['focus_time_list']) as List<dynamic>).cast<String>();
     this.createdTime = map['created_time'];
     this.finished = map['finished'];
+    this.topic = map['topic'];
   }
 
   Map<String, dynamic> toMap() {
@@ -42,7 +46,8 @@ class Task {
       'content': content,
       'focus_time_list': json.encode(focusTimeList),
       'created_time': createdTime,
-      'finished': finished
+      'finished': finished,
+      'topic': topic
     };
   }
 

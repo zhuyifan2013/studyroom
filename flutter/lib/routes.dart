@@ -1,5 +1,7 @@
+import 'package:app/pages/page_home/room_setting.dart';
 import 'package:app/pages/page_study_room/page_study_room.dart';
 import 'package:app/pages/signup_login/page_signup_login.dart';
+import 'package:app/utils/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -35,6 +37,10 @@ class RouteConfiguration {
     Path(
       r'^' + SignupLoginPage.defaultRoute,
           (context, match, args) => SignupLoginPage(),
+    ),
+    Path(
+      r'^' + Constants.ROUTE_ROOM_SETTING,
+          (context, match, args) => RoomSettingPage(),
     ),
     Path(
       r'^/',

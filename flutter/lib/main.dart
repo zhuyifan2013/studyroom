@@ -82,38 +82,6 @@ class _MainPageState extends State<MainPage> {
             Icon(Icons.home,color: AppThemeData.color_app),
             Icon(Icons.android, color: AppThemeData.color_app),
           ],
-
-//          decoration: BoxDecoration(
-//            borderRadius: BorderRadius.only(
-//                topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-//            boxShadow: [
-//              BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
-//            ],
-//          ),
-//          child: ClipRRect(
-//            borderRadius: BorderRadius.only(
-//              topLeft: Radius.circular(30.0),
-//              topRight: Radius.circular(30.0),
-//            ),
-//            child: BottomNavigationBar(
-//              currentIndex: _selectedIndex,
-//              items: [
-//                BottomNavigationBarItem(
-//                  icon: Icon(Icons.home),
-//                  title: Text('Home'),
-//                ),
-//                BottomNavigationBarItem(
-//                  icon: Icon(Icons.account_circle),
-//                  title: Text('Me'),
-//                ),
-//                BottomNavigationBarItem(
-//                  icon: Icon(Icons.android),
-//                  title: Text('Debug'),
-//                ),
-//              ],
-//              onTap: _onItemTapped,
-//            ),
-//          ),
         ));
   }
 
