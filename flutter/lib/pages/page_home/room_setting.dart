@@ -91,7 +91,7 @@ class _RoomSettingPageState extends State<RoomSettingPage> {
                 )),
             SRButton(
               onPressed: () {
-                Navigator.pushNamed(context, PageStudyRoom.defaultRoute, arguments: StudyRoomArgs(currentTimeTag.duration, currentTask.topic, currentTask.id));
+                Navigator.pushNamed(context, PageStudyRoom.defaultRoute, arguments: StudyRoomArgs(currentTimeTag.duration, "currentTask.topic", currentTask.id));
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

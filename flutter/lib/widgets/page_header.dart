@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class PageHeader extends StatelessWidget {
-  const PageHeader({Key key, @required String title, @required VoidCallback onPress}) : super(key: key);
+
+  String title;
+  VoidCallback onPress;
+
+  PageHeader({Key key, @required this.title, @required this.onPress}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +19,7 @@ class PageHeader extends StatelessWidget {
             flex: 1,
             child: Container(
               alignment: Alignment.center,
-              child: Text('测试Title'),
+              child: Text(this.title),
             ),
           ),
           Expanded(
@@ -23,7 +27,7 @@ class PageHeader extends StatelessWidget {
             child: Container(
               alignment: Alignment.centerRight,
               child: IconButton(
-                icon: Icon(Icons.close, color: Colors.black,), onPressed: () {  },
+                icon: Icon(Icons.close, color: Colors.black,), onPressed: this.onPress,
               ),
             ),
           )

@@ -26,48 +26,44 @@ class _PageHomeState extends State<PageHome> {
           child: headerButton1(context),
         ),
         SizedBox(height: 32),
-        _buildTaskSection(context)
+        ..._buildTaskSection(context)
       ],
     );
   }
 
   Widget headerButton1(BuildContext context) => SRButton(
-    child: Text('Study',style: TextStyle(color: Colors.white)),
-    onPressed: () {
-      log("Click");
-      if(TaskManager().getTasks().isNotEmpty) {
+        child: Text('Study', style: TextStyle(color: Colors.white)),
+        onPressed: () {
+          log("Click");
+          if (TaskManager().getTasks().isNotEmpty) {
 //        _showRoomSetting(context);
-        Navigator.pushNamed(context, Constants.ROUTE_ROOM_SETTING);
-      }
-    },
-  );
+            Navigator.pushNamed(context, Constants.ROUTE_ROOM_SETTING);
+          }
+        },
+      );
 
   String _taskContent;
 
-  Widget _buildTaskSection(BuildContext context) => Container(
-        child: Column(
+  List<Widget> _buildTaskSection(BuildContext context) => <Widget>[
+        Row(
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    'Today',
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    _addTask();
-                  },
-                  icon: Icon(Icons.add_circle, color: Colors.blue),
-                )
-              ],
+            Expanded(
+              flex: 1,
+              child: Text(
+                'Today',
+                style: Theme.of(context).textTheme.headline5,
+              ),
             ),
-            _buildTaskList(),
+            IconButton(
+              onPressed: () {
+                _addTask();
+              },
+              icon: Icon(Icons.add_circle, color: Colors.blue),
+            )
           ],
         ),
-      );
+        _buildTaskList(),
+      ];
 
   void _addTask() {
     showModalBottomSheet(
