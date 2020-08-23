@@ -64,6 +64,9 @@ class _RoomSettingPageState extends State<RoomSettingPage> {
                         currentTimeTag = timeTags[index];
                       });
                     },
+                    backgroundColor: Colors.white,
+                    elevation: 1,
+                    shadowColor: AppThemeData.color_page_bg,
                   );
                 })),
             Align(
